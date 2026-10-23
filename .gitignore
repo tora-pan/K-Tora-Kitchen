@@ -1,0 +1,90 @@
+# ==========================================
+# Unity generated files and folders
+# ==========================================
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+MemoryCaptures/
+Recordings/
+
+# Unity generated IDE/project files
+ExportedObj/
+.consulo/
+.gradle/
+.vs/
+.idea/
+.vscode/
+*.csproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svclog
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.VC.VC.opendb
+
+# Unity crash and diagnostic files
+sysinfo.txt
+crashlytics-build.properties
+
+# ==========================================
+# Build artifacts
+# ==========================================
+*.apk
+*.aab
+*.unitypackage
+*.app
+*.exe
+*.dll
+*.so
+*.dylib
+*.ipa
+*.zip
+
+# ==========================================
+# IDE and editor backups
+# ==========================================
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==========================================
+# Visual Studio / VS Code
+# ==========================================
+.vs/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# ==========================================
+# JetBrains Rider
+# ==========================================
+.idea/
+*.sln.iml
+
+# ==========================================
+# Claude Code local settings
+# ==========================================
+.claude/settings.local.json
+
+# ==========================================
+# Optional: local environment and secrets
+# ==========================================
+.env
+.env.*
+!.env.example
