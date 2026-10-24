@@ -25,6 +25,8 @@ public class Customer : MonoBehaviour
 
     public State CurrentState { get; private set; }
     public RecipeData Order { get; private set; }
+    public bool IsOrderPrepared { get; private set; }
+    public bool LeftUnserved { get; private set; }
 
     public event Action<Customer> StateChanged;
     public event Action<Customer> Left;
@@ -83,14 +85,38 @@ public class Customer : MonoBehaviour
         }
     }
 
+    public bool TryMarkOrderPrepared()
+    {
+        if (CurrentState != State.WaitingForFood || IsOrderPrepared)
+        {
+            return false;
+        }
+
+        IsOrderPrepared = true;
+        StateChanged?.Invoke(this);
+        return true;
+    }
+
     public bool TryServe()
+    {
+        if (CurrentState != State.WaitingForFood || !IsOrderPrepared)
+        {
+            return false;
+        }
+
+        EnterState(State.Paying, payDuration);
+        return true;
+    }
+
+    public bool TryLeaveUnserved()
     {
         if (CurrentState != State.WaitingForFood)
         {
             return false;
         }
 
-        EnterState(State.Paying, payDuration);
+        LeftUnserved = true;
+        EnterState(State.Leaving);
         return true;
     }
 

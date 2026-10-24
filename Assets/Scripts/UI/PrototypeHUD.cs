@@ -1,13 +1,16 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class PrototypeHUD : MonoBehaviour
 {
     [SerializeField] private CashRegister cashRegister;
     [SerializeField] private CustomerLoop customerLoop;
+    [SerializeField] private SobaSkillCheck skillCheck;
     [SerializeField] private TMP_Text cashText;
     [SerializeField] private TMP_Text orderText;
+    [SerializeField] private Button prepareButton;
     [SerializeField] private Button serveButton;
 
     private Customer trackedCustomer;
@@ -30,6 +33,9 @@ public class PrototypeHUD : MonoBehaviour
 
         cashRegister.CashChanged += UpdateCash;
         customerLoop.CustomerChanged += TrackCustomer;
+        skillCheck.Started += RefreshOrder;
+        skillCheck.Ended += RefreshOrder;
+        prepareButton.onClick.AddListener(PrepareCurrentOrder);
         serveButton.onClick.AddListener(customerLoop.ServeCurrentCustomer);
 
         UpdateCash(cashRegister.Cash);
@@ -45,14 +51,33 @@ public class PrototypeHUD : MonoBehaviour
 
         cashRegister.CashChanged -= UpdateCash;
         customerLoop.CustomerChanged -= TrackCustomer;
+        skillCheck.Started -= RefreshOrder;
+        skillCheck.Ended -= RefreshOrder;
+        prepareButton.onClick.RemoveListener(PrepareCurrentOrder);
         serveButton.onClick.RemoveListener(customerLoop.ServeCurrentCustomer);
         TrackCustomer(null);
     }
 
     private bool HasReferences()
     {
-        return cashRegister != null && customerLoop != null
-            && cashText != null && orderText != null && serveButton != null;
+        return cashRegister != null && customerLoop != null && skillCheck != null
+            && cashText != null && orderText != null && prepareButton != null && serveButton != null;
+    }
+
+    private void PrepareCurrentOrder()
+    {
+        // Deselect the button so Space presses during the skill check can't also submit UI.
+        if (EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+
+        skillCheck.Begin(customerLoop.CurrentCustomer);
+    }
+
+    private void RefreshOrder()
+    {
+        UpdateOrder(trackedCustomer);
     }
 
     private void UpdateCash(int cash)
@@ -82,6 +107,7 @@ public class PrototypeHUD : MonoBehaviour
         if (customer == null)
         {
             orderText.text = "Waiting for customer...";
+            prepareButton.interactable = false;
             serveButton.interactable = false;
             return;
         }
@@ -95,14 +121,20 @@ public class PrototypeHUD : MonoBehaviour
                 orderText.text = "Customer is ordering...";
                 break;
             case Customer.State.WaitingForFood:
-                orderText.text = $"Order: {customer.Order.DisplayName} (¥{customer.Order.Price:N0})";
+                orderText.text = customer.IsOrderPrepared
+                    ? $"{customer.Order.DisplayName} is ready - serve it!"
+                    : $"Order: {customer.Order.DisplayName} (¥{customer.Order.Price:N0})";
                 break;
             case Customer.State.Paying:
             case Customer.State.Leaving:
-                orderText.text = $"Served {customer.Order.DisplayName}!";
+                orderText.text = customer.LeftUnserved
+                    ? "Customer lost patience and left!"
+                    : $"Served {customer.Order.DisplayName}!";
                 break;
         }
 
-        serveButton.interactable = customer.CurrentState == Customer.State.WaitingForFood;
+        bool waiting = customer.CurrentState == Customer.State.WaitingForFood;
+        prepareButton.interactable = waiting && !customer.IsOrderPrepared && !skillCheck.IsActive;
+        serveButton.interactable = waiting && customer.IsOrderPrepared;
     }
 }
