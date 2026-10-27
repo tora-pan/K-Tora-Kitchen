@@ -247,6 +247,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerPrefab: {fileID: 2393868270232861926, guid: 6ae780a632e7949789ef5f844282fd3c, type: 3}
+  customerModels:
+  - {fileID: 919132149155446097, guid: 1946db7d5be7d436ea2d1ced9f8ddd4a, type: 3}
+  - {fileID: 919132149155446097, guid: e3f43512d6b1647cda7b85e1815cb3a1, type: 3}
+  - {fileID: 919132149155446097, guid: 976c126c3d5b04f729904f740535b451, type: 3}
+  - {fileID: 919132149155446097, guid: 2d0e3460e68a54ee2a99a5252c366319, type: 3}
+  - {fileID: 919132149155446097, guid: be7b7d26555d443148310fe206b20237, type: 3}
+  - {fileID: 919132149155446097, guid: 8556308bf3b894cd5acea497a7de6c3d, type: 3}
+  - {fileID: 919132149155446097, guid: 8046c9fd574fb49d69e6cad333b1c348, type: 3}
+  - {fileID: 919132149155446097, guid: c0124c6937d64436d9be656fb83b4bbf, type: 3}
   menuItem: {fileID: 11400000, guid: 42b48202c332d45f492591267d9438ca, type: 2}
   cashRegister: {fileID: 64655657}
   spawnPoint: {fileID: 438175938}
@@ -2449,7 +2458,7 @@ Transform:
   m_GameObject: {fileID: 1798849460}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.45, y: 0, z: -1.077621}
+  m_LocalPosition: {x: 7.04, y: 0, z: -6.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2778,7 +2787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8813307038797090322, guid: 82d5ffd27359b4a1db2d8de97cee1830, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -2.1
       objectReference: {fileID: 0}
     - target: {fileID: 8813307038797090322, guid: 82d5ffd27359b4a1db2d8de97cee1830, type: 3}
       propertyPath: m_LocalPosition.y

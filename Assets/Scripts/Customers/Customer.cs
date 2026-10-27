@@ -13,6 +13,7 @@ public class Customer : MonoBehaviour
     }
 
     [SerializeField, Min(0.1f)] private float walkSpeed = 2f;
+    [SerializeField, Min(0f)] private float turnSpeed = 720f;
     [SerializeField, Min(0f)] private float orderDuration = 1f;
     [SerializeField, Min(0f)] private float payDuration = 1f;
 
@@ -61,13 +62,19 @@ public class Customer : MonoBehaviour
                 break;
 
             case State.Ordering:
+                FaceCounter();
                 if (TickTimer())
                 {
                     EnterState(State.WaitingForFood);
                 }
                 break;
 
+            case State.WaitingForFood:
+                FaceCounter();
+                break;
+
             case State.Paying:
+                FaceCounter();
                 if (TickTimer())
                 {
                     cashRegister.AddCash(Order.Price);
@@ -136,7 +143,31 @@ public class Customer : MonoBehaviour
     private bool MoveTowards(Vector3 target)
     {
         target.y = transform.position.y;
+        Vector3 toTarget = target - transform.position;
+        if (toTarget.sqrMagnitude > ArrivalDistance * ArrivalDistance)
+        {
+            TurnTowards(toTarget);
+        }
+
         transform.position = Vector3.MoveTowards(transform.position, target, walkSpeed * Time.deltaTime);
         return (transform.position - target).sqrMagnitude <= ArrivalDistance * ArrivalDistance;
+    }
+
+    // CounterPoint's forward (blue) axis points at the truck; rotate it in the scene to change where customers look.
+    private void FaceCounter()
+    {
+        TurnTowards(counterPoint.forward);
+    }
+
+    private void TurnTowards(Vector3 direction)
+    {
+        direction.y = 0f;
+        if (direction.sqrMagnitude < Mathf.Epsilon)
+        {
+            return;
+        }
+
+        Quaternion facing = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, facing, turnSpeed * Time.deltaTime);
     }
 }
